@@ -1,26 +1,21 @@
+import os, sys
 import numpy as np 
 import matplotlib.pyplot as plt 
-import drawfirst, income, rule, initialpedestrian, data 
+import building, rule, drawer 
 
-def run(): 
-	plt.figure(figsize=(8, 8)) 
-	evacuation_time = 0 
-	time_after_step = 0 
-	allPeople = initialpedestrian.creatPeople() 
-	drawfirst.draw_main(allPeople,time_after_step) 
+tempBlueprint = [[False, False, True, True, True, True], 
+				 [False, True, True, True, True, True],
+				 [False, True, True, True, True, True],
+				 [False, True, True, True, True, True],
+				 [False, True, True, True, True, True],
+				 [False, True, True, True, True, True]]
+exits = [(5, 5)]
+danger_sources = [(1, 1)]
+agents = [(2, 2)]
 
-	while data.FLAG: 
-		for p in allPeople: 
-			rule.InExit(p,allPeople) 
-			direcetion = income.Priority(p,allPeople) 
-			rule.PeopleMove(p, allPeople, direcetion) 
-		drawfirst.draw_main(allPeople,time_after_step) 
 
-		if len(allPeople) == 0: 
-			data.FLAG = False 
-		evacuation_time += 1 
-		time_after_step += 1 
+def main(): 
+	testBuilding = building.Building(tempBlueprint, exits, danger_sources, agents)
 
-	print(evacuation_time) 
-
-if __name__ == '__main__': run()
+if __name__ == '__main__': 
+	main()
