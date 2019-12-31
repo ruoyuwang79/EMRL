@@ -1,3 +1,5 @@
+from rule import *
+
 class Position:
 	def __init__(self, x, y):
 		self.x = int(x)
@@ -26,6 +28,12 @@ class Actions:
 	SOUTHEAST = Position(1, -1)
 
 	directions = [NORTHWEST, NORTH, NORTHEAST, WEST, STOP, EAST, SOUTHWEST, SOUTH, SOUTHEAST]
+
+class ExitDoor:
+	def __init__(self, pos, size):
+		self.pos = pos
+		self.size = size
+	# may add more attributes for further congestion calculation
 
 class Grid:
 	def __init__(self, blueprint):
@@ -74,3 +82,10 @@ class Building:
 		# how to update agents states
 		for agent in self.agents:
 			agent.update()
+
+	def evaluation(self):
+		return 0
+		# use all agents information to get a global programming
+
+	def takeActions(self):
+		# based on evalution, choose an action

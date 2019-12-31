@@ -1,7 +1,7 @@
 import os, sys
 import numpy as np 
 import matplotlib.pyplot as plt 
-import building, rule, drawer 
+import building, drawer 
 
 tempBlueprint = [[False, False, True, True, True, True], 
 				 [False, True, True, True, True, True],
