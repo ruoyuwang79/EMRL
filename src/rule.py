@@ -12,6 +12,11 @@ def distance_to_exit(building):
 	return total
 
 def distance_to_danger():
+	total = 0
+	for agent in building.agents:
+		nearest = min(((agent - exit.pos) for exit in building.exits), key = lambda x: x.x + x.y)
+		total += nearest.x + nearest.y
+	return total
 	pass
 
 def possibility_of_danger():
