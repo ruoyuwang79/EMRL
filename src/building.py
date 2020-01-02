@@ -8,13 +8,19 @@ class Position:
 	def __add__(self, other):
 		return Position(self.x + other.x, self.y + other.y)
 
+	def __sub__(self, other):
+		return Position(abs(self.x - other.x), abs(self.y - other.y))
+
 	def __eq__(self, other):
 		return self.x == other.x and self.y == other.y
 
-	def __set
-
 	def __str__(self):
 		return '(' + str(self.x) + ', ' + str(self.y) + ')'
+
+class Agent(Position):
+	def update(self, action):
+		self.x += action.x
+		self.y += action.y
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
@@ -70,11 +76,11 @@ class Building:
 	def __init__(self, blueprint, exits, danger_centers, agents):
 		# the blueprint of the building, should not be changed
 		self.grid = Grid(blueprint)
-		self.exits = list(Position(exit[0], exit[1]) for exit in exits)
+		self.exits = list(ExitDoor(Position(exit[0], exit[1]), exit[2]) for exit in exits)
 
 		# need to update, the period can be determined by the main
 		self.danger_sources = list(Danger_Source(danger) for danger in danger_centers)
-		self.agents = list(Position(agent[0], agent[1]) for agent in agents)
+		self.agents = list(Agent(agent[0], agent[1]) for agent in agents)
 
 	def update(self):
 		for danger_source in self.danger_sources:
@@ -83,9 +89,12 @@ class Building:
 		for agent in self.agents:
 			agent.update()
 
+
 	def evaluation(self):
+		print(distance_to_exit(self))
 		return 0
 		# use all agents information to get a global programming
 
 	def takeActions(self):
+		pass
 		# based on evalution, choose an action

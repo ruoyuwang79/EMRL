@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt 
 from matplotlib.widgets import Slider, Button, RadioButtons 
-import data, initialpedestrian 
-exits= data.EXIT_INDEX 
+import building, initialpedestrian 
+exits= building.EXIT_INDEX 
 
 def draw_main(Peoples,time_after_step): 
 	plt.clf() 
