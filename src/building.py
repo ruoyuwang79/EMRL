@@ -91,7 +91,7 @@ class Building:
 
 
 	def evaluation(self):
-		print(distance_to_exit(self))
+		print(congestion(self))
 		return 0
 		# use all agents information to get a global programming
 
