@@ -31,14 +31,6 @@ def distance_to_danger(building):
 def possibility_of_danger():
 	pass
 
-#####
-def find_neighbor_num(agent,d,building):
-	total = -1
-	for i in building.agents:
-		pos = i-agent
-		if (pos.x+pos.y) < d:
-			total += 1
-	return total
 
 def agents_position(building, actions):
 	assert(len(building.agents) == len(actions))
@@ -51,3 +43,14 @@ def agents_position(building, actions):
 def possibility_of_danger(building):
 	# Based on Ziqi's model
 	pass
+
+
+
+#####help function
+def find_neighbor_num(agent,d,building):
+	total = -1
+	for i in building.agents:
+		pos = i-agent
+		if (pos.x+pos.y) < d:
+			total += 1
+	return total
