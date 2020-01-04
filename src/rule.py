@@ -23,6 +23,14 @@ def distance_to_danger(building):
 		total += min_dis
 	return total
 
+def agents_position(building, actions):
+	assert(len(building.agents) == len(actions))
+	agentsAction = list(zip(building.agents, actions))
+	for agent in agentsAction:
+		if building.grid.isWwall(agent[0]) or building.grid.isWwall(agent[0].move(agent[1])):
+			return False
+	return True
+
 def possibility_of_danger(building):
 	# Based on Ziqi's model
 	pass

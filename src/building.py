@@ -21,6 +21,8 @@ class Agent(Position):
 	def update(self, action):
 		self.x += action.x
 		self.y += action.y
+	def move(self, action):
+		return self + action
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
