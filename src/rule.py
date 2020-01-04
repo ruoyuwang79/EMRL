@@ -16,7 +16,7 @@ def distance_to_danger(building):
 	for agent in building.agents:	
 		min_dis = float('inf')
 		for danger_source in building.danger_sources:
-			for danger in danger_source.area:
+			for danger in danger_source.danger_area:
 				distance = agent - danger
 				if distance.x + distance.y < min_dis:
 					min_dis = distance.x + distance.y
@@ -25,3 +25,4 @@ def distance_to_danger(building):
 
 def possibility_of_danger(building):
 	# Based on Ziqi's model
+	pass
