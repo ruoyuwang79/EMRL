@@ -2,7 +2,11 @@ def congestion(building):
 	# how to solve the congestion problem
 	# need to take the door size into consideration
 	# return a number to evalute the condition
-	pass
+	total = 0
+	d = 4
+	for agent in building.agents:
+		total += find_neighbor_num(agent,d,building)
+	return total
 
 def distance_to_exit(building):
 	total = 0
@@ -21,3 +25,12 @@ def distance_to_danger():
 
 def possibility_of_danger():
 	pass
+
+#####
+def find_neighbor_num(agent,d,building):
+	total = -1
+	for i in building.agents:
+		pos = i-agent
+		if (pos.x+pos.y) < d:
+			total += 1
+	return total
