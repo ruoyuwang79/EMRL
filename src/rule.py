@@ -11,13 +11,17 @@ def distance_to_exit(building):
 		total += nearest.x + nearest.y
 	return total
 
-def distance_to_danger():
+def distance_to_danger(building):
 	total = 0
-	for agent in building.agents:
-		nearest = min(((agent - exit.pos) for exit in building.exits), key = lambda x: x.x + x.y)
-		total += nearest.x + nearest.y
+	for agent in building.agents:	
+		min_dis = float('inf')
+		for danger_source in building.danger_sources:
+			for danger in danger_source.area:
+				distance = agent - danger
+				if distance.x + distance.y < min_dis:
+					min_dis = distance.x + distance.y
+		total += min_dis
 	return total
-	pass
 
-def possibility_of_danger():
-	pass
+def possibility_of_danger(building):
+	# Based on Ziqi's model
