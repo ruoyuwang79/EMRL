@@ -21,6 +21,8 @@ class Agent(Position):
 	def update(self, action):
 		self.x += action.x
 		self.y += action.y
+	def move(self, action):
+		return self + action
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
@@ -92,6 +94,10 @@ class Building:
 
 	def evaluation(self):
 		print(congestion(self))
+		print(distance_to_exit(self))
+		print(distance_to_danger(self))
+		print(agents_position(self, [Actions.SOUTHEAST]))
+
 		return 0
 		# use all agents information to get a global programming
 
