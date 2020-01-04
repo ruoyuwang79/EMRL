@@ -27,7 +27,7 @@ def agents_position(building, actions):
 	assert(len(building.agents) == len(actions))
 	agentsAction = list(zip(building.agents, actions))
 	for agent in agentsAction:
-		if building.grid.isWwall(agent[0]) or building.grid.isWwall(agent[0].move(agent[1])):
+		if building.grid.isWall(agent[0]) or building.grid.isWall(agent[0].move(agent[1])):
 			return False
 	return True
 

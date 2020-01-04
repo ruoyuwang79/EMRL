@@ -95,6 +95,7 @@ class Building:
 	def evaluation(self):
 		print(distance_to_exit(self))
 		print(distance_to_danger(self))
+		print(agents_position(self, [Actions.SOUTHEAST]))
 		return 0
 		# use all agents information to get a global programming
 
