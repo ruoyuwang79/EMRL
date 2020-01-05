@@ -1,7 +1,7 @@
 import os, sys
 import numpy as np 
 import matplotlib.pyplot as plt 
-import building 
+import building, drawer
 
 tempBlueprint = [[False, False, True, True, True, True], 
 				 [False, True, True, True, True, True],
@@ -16,7 +16,8 @@ agents = [(2, 2)]
 
 def main(): 
 	testBuilding = building.Building(tempBlueprint, exits, danger_sources, agents)
-	testBuilding.evaluation()
+	testDrawer = drawer.Drawer(testBuilding)
+	testDrawer.draw()
 
 if __name__ == '__main__': 
 	main()

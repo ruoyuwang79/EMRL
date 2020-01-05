@@ -45,4 +45,4 @@ def find_neighbor_num(agent,d,building):
 	return total
 
 def checkIllegal(actions):
-
+	pass

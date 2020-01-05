@@ -142,7 +142,7 @@ class Building:
 	def evaluation(self):
 		agentsActions = [agent.possible_actions(self) for agent in self.agents]
 		if checkIllegal(actions):
-			QValue = 
+			QValue = 0
 		return 0
 		# use all agents information to get a global programming
 
