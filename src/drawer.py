@@ -11,6 +11,7 @@ class Drawer:
 			for j in range(len(booleanMap[i])):
 				if booleanMap[i][j]:
 					self.blueprint[i][j] = 255
+		self.blueprint = self.blueprint
 
 	def draw(self):
 		plt.imshow(self.blueprint)
