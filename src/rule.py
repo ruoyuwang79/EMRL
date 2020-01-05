@@ -8,29 +8,18 @@ def congestion(building):
 		total += find_neighbor_num(agent,d,building)
 	return total
 
-def distance_to_exit(building):
-	total = 0
-	for agent in building.agents:
-		nearest = min(((agent - exit.pos) for exit in building.exits), key = lambda x: x.x + x.y)
-		total += nearest.x + nearest.y
-	return total
+def distance_to_exit(agent):
+	nearest = min(((agent - exit.pos) for exit in building.exits), key = lambda x: x.x + x.y)
+	return nearest.x + nearest.y
 
-def distance_to_danger(building):
-	total = 0
-	for agent in building.agents:	
-		min_dis = float('inf')
-		for danger_source in building.danger_sources:
-			for danger in danger_source.danger_area:
-				distance = agent - danger
-				if distance.x + distance.y < min_dis:
-					min_dis = distance.x + distance.y
-		total += min_dis
-	return total
-
-
-def possibility_of_danger():
-	pass
-
+def distance_to_danger(agent):
+	min_dis = float('inf')
+	for danger_source in building.danger_sources:
+		for danger in danger_source.danger_area:
+			distance = agent - danger
+			if distance.x + distance.y < min_dis:
+				min_dis = distance.x + distance.y
+	return min_dis
 
 def agents_position(building, actions):
 	assert(len(building.agents) == len(actions))

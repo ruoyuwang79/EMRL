@@ -18,11 +18,25 @@ class Position:
 		return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
 class Agent(Position):
+	def evaluation(self):
+		return find_neighbor_num(self, 4, building) + distance_to_exit(self) + distance_to_danger(self) + agents_position(self)
+
 	def update(self, action):
 		self.x += action.x
 		self.y += action.y
+		
 	def move(self, action):
 		return self + action
+
+	def possible_actions(self):
+		actions = []
+		for action in Actions.directions:
+			QValue = self.evaluation(self.move(action))
+			if QValue > threshold:
+				actions.append((action, QValue))
+
+		sorted(actions, key = lambda x: -x[1])
+		return actions
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
@@ -93,11 +107,8 @@ class Building:
 
 
 	def evaluation(self):
-		print(congestion(self))
-		print(distance_to_exit(self))
-		print(distance_to_danger(self))
-		print(agents_position(self, [Actions.SOUTHEAST]))
-
+		agentsActions = [agent.possible_actions() for agent in self.agents]
+		agents_position(self, )
 		return 0
 		# use all agents information to get a global programming
 
