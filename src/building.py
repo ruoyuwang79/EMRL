@@ -17,6 +17,19 @@ class Position:
 	def __str__(self):
 		return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
+	def is_in(self,L):
+
+		for item in L:
+			if item.x == self.x and item.y == self.y:
+				return True
+
+		return False
+
+	# def Around(self): 
+	# 	around = [] 
+	# 	around.append([[self.x - 1, self.y + 1], [self.x, self.y + 1], [self.x + 1, self.y + 1], [self.x - 1, self.y], [self.x, self.y], [self.x + 1, self.y],[self.x - 1, self.y - 1], [self.x, self.y - 1], [self.x + 1, self.y - 1]]) 
+	# 	return around 
+
 class Agent(Position):
 	def evaluation(self):
 		return find_neighbor_num(self, 4, building) + distance_to_exit(self) + distance_to_danger(self) + agents_position(self)
@@ -79,14 +92,48 @@ class Danger_Source:
 		self.danger_area = [self.danger_center]
 		self.extension_function = self.get_function(danger_type)
 
+		self.extension_speed = None
+		self.extension_range = None
+
 	def get_function(self, danger_type):
 		# maybe different danger_source have different function
-		pass
+		if danger_type is "fire":
+			return 2, 3
+
+		elif danger_type is "gas":
+			return 4, 6
+			
 
 	def danger_extension(self, grid):
 		# will be called in the building periodically
 		# use grid.getDirections(somePosition) to get available direction (in list)
-		pass
+		self.extension_speed, self.extension_range = self.get_function(self.danger_type)
+
+		for p in self.danger_area:
+
+			around = [Position(p.x - 1, p.y + 1), Position(p.x, p.y + 1), Position(p.x + 1, p.y + 1), Position(p.x - 1, p.y), Position(p.x, p.y), Position(p.x + 1, p.y),Position(p.x - 1, p.y - 1), Position(p.x, p.y - 1), Position(p.x + 1, p.y - 1)] 
+
+			possible_area = random.sample(around, self.speed)
+
+			for pos in possible_area:
+
+				distance2danger_center = math.sqrt((danger_center[0] - pos.x) ** 2 + (danger_center[1] - pos.y) ** 2)
+
+				if distance2danger_center <= self.extension_range and (not pos.is_in(self.danger_area)):
+
+					self.danger_area.append(pos)
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Building:
 	def __init__(self, blueprint, exits, danger_centers, agents):
