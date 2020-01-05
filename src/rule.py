@@ -21,15 +21,15 @@ def distance_to_danger(agent):
 				min_dis = distance.x + distance.y
 	return min_dis
 
-def agents_position(building, actions):
-	assert(len(building.agents) == len(actions))
-	agentsAction = list(zip(building.agents, actions))
-	for agent in agentsAction:
-		if building.grid.isWall(agent[0]) or building.grid.isWall(agent[0].move(agent[1])):
+def agents_position(agent, building):
+	for danger_source in building.danger_sources:
+		if agent in danger_source.danger_area:
+			return False
+	if building.grid.isWall(agent[0]):
 			return False
 	return True
 
-def possibility_of_danger(building):
+def possibility_of_danger(agent):
 	# Based on Ziqi's model
 	pass
 
@@ -43,3 +43,6 @@ def find_neighbor_num(agent,d,building):
 		if (pos.x+pos.y) < d:
 			total += 1
 	return total
+
+def checkIllegal(actions):
+

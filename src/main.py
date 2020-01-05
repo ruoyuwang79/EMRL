@@ -9,7 +9,7 @@ tempBlueprint = [[False, False, True, True, True, True],
 				 [False, True, True, True, True, True],
 				 [False, True, True, True, True, True],
 				 [False, True, True, True, True, True]]
-exits = [(5, 5, 1)]
+exits = [(5, 5)]
 danger_sources = [(1, 1)]
 agents = [(2, 2)]
 

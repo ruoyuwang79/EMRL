@@ -31,8 +31,11 @@ class Position:
 	# 	return around 
 
 class Agent(Position):
-	def evaluation(self):
-		return find_neighbor_num(self, 4, building) + distance_to_exit(self) + distance_to_danger(self) + agents_position(self)
+	def evaluation(self, building):
+		if agents_position(self, building):
+			return find_neighbor_num(self, 4, building) + distance_to_exit(self) + distance_to_danger(self)
+		else:
+			return -float('inf')
 
 	def update(self, action):
 		self.x += action.x
@@ -41,15 +44,15 @@ class Agent(Position):
 	def move(self, action):
 		return self + action
 
-	def possible_actions(self):
+	def possible_actions(self, building):
 		actions = []
+		threshold = 100 # may be programmable
 		for action in Actions.directions:
-			QValue = self.evaluation(self.move(action))
+			QValue = self.evaluation(self.move(action), building)
 			if QValue > threshold:
 				actions.append((action, QValue))
 
-		sorted(actions, key = lambda x: -x[1])
-		return actions
+		return sorted(actions, key = lambda x: -x[1])
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
@@ -63,12 +66,6 @@ class Actions:
 	SOUTHEAST = Position(1, -1)
 
 	directions = [NORTHWEST, NORTH, NORTHEAST, WEST, STOP, EAST, SOUTHWEST, SOUTH, SOUTHEAST]
-
-class ExitDoor:
-	def __init__(self, pos, size):
-		self.pos = pos
-		self.size = size
-	# may add more attributes for further congestion calculation
 
 class Grid:
 	def __init__(self, blueprint):
@@ -139,7 +136,7 @@ class Building:
 	def __init__(self, blueprint, exits, danger_centers, agents):
 		# the blueprint of the building, should not be changed
 		self.grid = Grid(blueprint)
-		self.exits = list(ExitDoor(Position(exit[0], exit[1]), exit[2]) for exit in exits)
+		self.exits = list(Position(exit[0], exit[1]) for exit in exits)
 
 		# need to update, the period can be determined by the main
 		self.danger_sources = list(Danger_Source(danger) for danger in danger_centers)
@@ -154,11 +151,19 @@ class Building:
 
 
 	def evaluation(self):
-		agentsActions = [agent.possible_actions() for agent in self.agents]
-		agents_position(self, )
+		agentsActions = [agent.possible_actions(self) for agent in self.agents]
+		if checkIllegal(actions):
+			QValue = 
 		return 0
 		# use all agents information to get a global programming
 
 	def takeActions(self):
-		pass
+		actions = self.evalution()
+		assert(len(actions) == len(self.agents))
+		for i in len(self.agents):
+			self.agents[i].update(actions[i])
+		
+		for agent in self.agents:
+			if agent in self.exits:
+				self.agents.remove(agent)
 		# based on evalution, choose an action
