@@ -121,17 +121,6 @@ class Danger_Source:
 					self.danger_area.append(pos)
 
 
-
-
-
-
-
-
-
-
-
-
-
 class Building:
 	def __init__(self, blueprint, exits, danger_centers, agents):
 		# the blueprint of the building, should not be changed
