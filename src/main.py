@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.image as mpimg 
 import building, drawer
 
-file_object = open('../img.csv')
+file_object = open('img.csv')
 blueprint = file_object.read().split('\n')
+file_object.close()
 blueprint = [i.split(',') for i in blueprint]
 # print(blueprint)
 tempBlueprint = [[False for j in range(len(blueprint[i]))] for i in range(len(blueprint))]
@@ -20,7 +21,7 @@ for i in range(len(blueprint)):
 # 				 [False, True, True, True, True, True],
 # 				 [False, True, True, True, True, True],
 # 				 [False, True, True, True, True, True]]
-exits = [(5, 5)]
+exits = [(67, 88), (62, 118), (63, 118), (64, 118)]
 danger_sources = [(1, 1)]
 agents = [(2, 2)]
 
