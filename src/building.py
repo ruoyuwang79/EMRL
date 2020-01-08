@@ -19,32 +19,15 @@ class Position:
 	def __str__(self):
 		return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
-	def is_in(self,L):
-
-		for item in L:
-			if item.x == self.x and item.y == self.y:
-				return True
-
-		return False
-
-	# def Around(self): 
-	# 	around = [] 
-	# 	around.append([[self.x - 1, self.y + 1], [self.x, self.y + 1], [self.x + 1, self.y + 1], [self.x - 1, self.y], [self.x, self.y], [self.x + 1, self.y],[self.x - 1, self.y - 1], [self.x, self.y - 1], [self.x + 1, self.y - 1]]) 
-	# 	return around 
-
 class Agent(Position):
-	def __init__(self):
-		self.weights = []
+	def __init__(self, x, y):
+		self.x = int(x)
+		self.y = int(y)
+		self.weights = [1, 1, 1]
 		self.alpha = 0.2
 		self.discount = 0.8
 
-	def evaluation(self, building):
-		if agents_position(self, building):
-			return find_neighbor_num(self, 4, building) + distance_to_exit(self) + distance_to_danger(self)
-		else:
-			return -float('inf')
-
-	def update(self, action):
+	def takeAction(self, action):
 		self.x += action.x
 		self.y += action.y
 		
@@ -53,13 +36,8 @@ class Agent(Position):
 
 	def possible_actions(self, building):
 		actions = []
-		threshold = 100 # may be programmable
-		for action in Actions.directions:
-			QValue = self.evaluation(self.move(action), building)
-			if QValue > threshold:
-				actions.append((action, QValue))
-
-		return sorted(actions, key = lambda x: -x[1])
+		
+		return actions
 
 	####q learning
 	def getQValue(self, state, action,feature):
@@ -67,7 +45,6 @@ class Agent(Position):
 		  Should return Q(state,action) = w * featureVector
 		  where * is the dotProduct operator
 		"""
-		"*** YOUR CODE HERE ***"
 		#feat = self.featExtractor.getFeatures(state,action)
 		temp = 0
 		for i in feature:#
@@ -79,7 +56,6 @@ class Agent(Position):
 		"""
 		   Should update your weights based on transition
 		"""
-		"*** YOUR CODE HERE ***"
 		#feat = self.featExtractor.getFeatures(state,action)
 		temp = (reward+self.discount*self.computeValueFromQValues(nextState, building)-self.getQValue(state,action))
 		for i in feature:
@@ -92,7 +68,6 @@ class Agent(Position):
 		  there are no legal actions, which is the case at the
 		  terminal state, you should return a value of 0.0.
 		"""
-		"*** YOUR CODE HERE ***"
 		temp = {}
 		act = self.getLegalActions(state,building)
 		if len(act) == 0:
@@ -101,7 +76,7 @@ class Agent(Position):
 			temp[a] = self.getQValue(state,a)
 
 		all_temp = list(temp.items())
-        values = [x[1] for x in all_temp]
+		values = [x[1] for x in all_temp]
 		return max(values)#temp[temp.argMax()]
 
 	def getLegalActions(self, state, building):
@@ -123,7 +98,7 @@ class Actions:
 	SOUTH = Position(0, -1)
 	SOUTHEAST = Position(1, -1)
 
-	directions = [NORTHWEST, NORTH, NORTHEAST, WEST, STOP, EAST, SOUTHWEST, SOUTH, SOUTHEAST]
+	directions = [NORTH, WEST, STOP, EAST, SOUTH]
 
 class Grid:
 	def __init__(self, blueprint):
@@ -174,7 +149,7 @@ class Danger_Source:
 
 				distance2danger_center = math.sqrt((self.danger_center.x - pos.x) ** 2 + (self.danger_center.y - pos.y) ** 2)
 
-				if distance2danger_center <= self.extension_range and (not pos.is_in(self.danger_area)):
+				if distance2danger_center <= self.extension_range and (pos not in self.danger_area):
 
 					self.danger_area.append(pos)
 

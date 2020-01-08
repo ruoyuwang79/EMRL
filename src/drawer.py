@@ -29,7 +29,7 @@ class Drawer:
 		fig = plt.figure()
 
 		ims = []
-		for i in range(50):
+		for i in range(10):
 			self.building.update()
 			self.update()
 			im = plt.imshow(self.blueprint, cmap = 'gist_ncar', animated = True)

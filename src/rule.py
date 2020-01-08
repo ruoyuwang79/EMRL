@@ -1,8 +1,11 @@
 # Agent features
+
+# weight: divide max(width, height)
 def distance_to_exit(agent, exits):
 	nearest = min(((agent - exit) for exit in exits), key = lambda x: x.x + x.y)
 	return nearest.x + nearest.y
 
+# weight: divide max(width, height)
 def distance_to_danger(agent, danger_sources):
 	min_dis = float('inf')
 	for danger_source in danger_sources:
@@ -12,6 +15,7 @@ def distance_to_danger(agent, danger_sources):
 				min_dis = distance.x + distance.y
 	return min_dis
 
+# weight: divide number of danger sources
 def danger_condition(agent, grid, danger_sources):
 	return sum((1 / ((agent - danger_source.danger_center).x + (agent - danger_source.danger_center).y)) for danger_source in danger_sources)
 
