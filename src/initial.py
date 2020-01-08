@@ -1,5 +1,9 @@
 import numpy as np
 
+global legal_pos
+legal_pos = []
+
+
 def extend(poslist,tempBlueprint,useless):
 
 	tmp = [i for i in poslist if i not in useless]
@@ -19,16 +23,13 @@ def extend(poslist,tempBlueprint,useless):
 						tmp.append(p)
 
 						useful = 1
-	#print(tmp)
-	if useful == 0:
 
+	if useful == 0:
 		useless.append(pos)
 
 	return tmp
 
 def lpos(agents,tempBlueprint):
-
-	
 
 	for i in range(2):
 		useless = []
