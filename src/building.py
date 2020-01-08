@@ -106,22 +106,21 @@ class Danger_Source:
 	def danger_extension(self, grid):
 		# will be called in the building periodically
 		# use grid.getDirections(somePosition) to get available direction (in list)
-		# self.extension_speed, self.extension_range = self.get_function(self.danger_type)
+		self.extension_speed, self.extension_range = self.get_function(self.danger_type)
 
-		# for p in self.danger_area:
+		for p in self.danger_area:
 
-		# 	around = [Position(p.x - 1, p.y + 1), Position(p.x, p.y + 1), Position(p.x + 1, p.y + 1), Position(p.x - 1, p.y), Position(p.x, p.y), Position(p.x + 1, p.y),Position(p.x - 1, p.y - 1), Position(p.x, p.y - 1), Position(p.x + 1, p.y - 1)] 
+			around = [Position(p.x - 1, p.y + 1), Position(p.x, p.y + 1), Position(p.x + 1, p.y + 1), Position(p.x - 1, p.y), Position(p.x, p.y), Position(p.x + 1, p.y),Position(p.x - 1, p.y - 1), Position(p.x, p.y - 1), Position(p.x + 1, p.y - 1)] 
 
-		# 	possible_area = random.sample(around, self.extension_speed)
+			possible_area = random.sample(around, self.extension_speed)
 
-		# 	for pos in possible_area:
+			for pos in possible_area:
 
-		# 		distance2danger_center = math.sqrt((self.danger_center.x - pos.x) ** 2 + (self.danger_center.y - pos.y) ** 2)
+				distance2danger_center = math.sqrt((self.danger_center.x - pos.x) ** 2 + (self.danger_center.y - pos.y) ** 2)
 
-		# 		if distance2danger_center <= self.extension_range and (not pos.is_in(self.danger_area)):
+				if distance2danger_center <= self.extension_range and (not pos.is_in(self.danger_area)):
 
-		# 			self.danger_area.append(pos)
-		self.danger_area.append(Position(self.danger_center.x + 1, self.danger_center.y + 1))
+					self.danger_area.append(pos)
 
 
 class Building:
@@ -137,7 +136,6 @@ class Building:
 	def update(self):
 		for danger_source in self.danger_sources:
 			danger_source.danger_extension(self.grid)
-			print(len(danger_source.danger_area))
 		# how to update agents states
 		# for agent in self.agents:
 		# 	agent.update()
