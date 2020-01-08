@@ -1,4 +1,6 @@
 from rule import *
+import random
+import math
 
 class Position:
 	def __init__(self, x, y):
@@ -110,11 +112,11 @@ class Danger_Source:
 
 			around = [Position(p.x - 1, p.y + 1), Position(p.x, p.y + 1), Position(p.x + 1, p.y + 1), Position(p.x - 1, p.y), Position(p.x, p.y), Position(p.x + 1, p.y),Position(p.x - 1, p.y - 1), Position(p.x, p.y - 1), Position(p.x + 1, p.y - 1)] 
 
-			possible_area = random.sample(around, self.speed)
+			possible_area = random.sample(around, self.extension_speed)
 
 			for pos in possible_area:
 
-				distance2danger_center = math.sqrt((danger_center[0] - pos.x) ** 2 + (danger_center[1] - pos.y) ** 2)
+				distance2danger_center = math.sqrt((self.danger_center.x - pos.x) ** 2 + (self.danger_center.y - pos.y) ** 2)
 
 				if distance2danger_center <= self.extension_range and (not pos.is_in(self.danger_area)):
 
@@ -135,8 +137,8 @@ class Building:
 		for danger_source in self.danger_sources:
 			danger_source.danger_extension(self.grid)
 		# how to update agents states
-		for agent in self.agents:
-			agent.update()
+		# for agent in self.agents:
+		# 	agent.update()
 
 
 	def evaluation(self):

@@ -4,10 +4,12 @@ a = [i.split(',') for i in a]
 
 for i in range(len(a)):
 	for j in range(len(a[i])):
-		if (i > 22 and i < 28) and (j > 132 and j < 153):
+		if (i > 32 and i < 38) and (j > 109 and j < 114):
 			a[i][j] = '255'
 
+a[26][92] = '255'
 
+# a[23][105] = '0'
 
 content = ''
 for i in a:
