@@ -1,6 +1,5 @@
 from rule import *
-import random
-import math
+import random, math
 
 class Position:
 	def __init__(self, x, y):
@@ -20,72 +19,47 @@ class Position:
 		return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
 class Agent(Position):
-	def __init__(self, x, y):
+	def __init__(self, x, y, mwh = 100, numds = 1, weights = []):
 		self.x = int(x)
 		self.y = int(y)
-		self.weights = [1, 1, 1]
-		self.alpha = 0.2
-		self.discount = 0.8
+		self.weights = [1 / mwh, 1 / mwh, 1 / numds]
+		if weights:
+			self.weights = weights
+		self.alpha = 0.5
+		self.discount = 0.9
+
+	def __add__(self, other):
+		return Agent(self.x + other.x, self.y + other.y, weights = self.weights)
 
 	def takeAction(self, action):
 		self.x += action.x
 		self.y += action.y
-		
-	def move(self, action):
-		return self + action
 
-	def possible_actions(self, building):
-		actions = []
-		
-		return actions
+	def getLegalActions(self, building):
+		return [action for action in Actions.directions if agents_position(self + action, building.grid, building.danger_sources)]
 
-	####q learning
-	def getQValue(self, state, action,feature):
-		"""
-		  Should return Q(state,action) = w * featureVector
-		  where * is the dotProduct operator
-		"""
-		#feat = self.featExtractor.getFeatures(state,action)
-		temp = 0
-		for i in feature:#
-			temp += self.weights[i]*feature[i]
-		return temp
+	def getFeatures(self, action, building):
+		return [distance_to_exit(self + action, building.exits), distance_to_danger(self + action, building.danger_sources), danger_condition(self + action, building.grid, building.danger_sources)]
 
+	def getValue(self, building):
+		actions = self.getLegalActions(building)
+		values = []
+		for action in actions:
+			values.append(self.getQValue(action, self.getFeatures(action, building)))
+		return max(values)
+
+	def getQValue(self, action, features):
+		return sum(self.weights[i] * features[i] for i in range(len(self.weights)))
+
+	def getPolicy(self, building):
+		actions = self.getLegalActions(building)
+		return max(actions, key = lambda x: self.getQValue(x, self.getFeatures(x, building)))
 	   
-	def update(self, state, action, nextState, reward, feature, building):
-		"""
-		   Should update your weights based on transition
-		"""
-		#feat = self.featExtractor.getFeatures(state,action)
-		temp = (reward+self.discount*self.computeValueFromQValues(nextState, building)-self.getQValue(state,action))
-		for i in feature:
-			self.weights[i] += self.alpha * temp * feature[i]
-
-	def computeValueFromQValues(self, state,building):
-		"""
-		  Returns max_action Q(state,action)
-		  where the max is over legal actions.  Note that if
-		  there are no legal actions, which is the case at the
-		  terminal state, you should return a value of 0.0.
-		"""
-		temp = {}
-		act = self.getLegalActions(state,building)
-		if len(act) == 0:
-			return float(0)
-		for a in act:
-			temp[a] = self.getQValue(state,a)
-
-		all_temp = list(temp.items())
-		values = [x[1] for x in all_temp]
-		return max(values)#temp[temp.argMax()]
-
-	def getLegalActions(self, state, building):
-		res = []
-		for i in Actions.directions:
-			if not building.grid.isWall(state + i):
-				res.append(i)
-		return res
-
+	def update(self, action, reward, features, building):
+		diff = (reward + self.discount * (self + action).getValue(building) - self.getQValue(action, features))
+		
+		for i in range(len(features)):
+			self.weights[i] += self.alpha * diff * features[i]
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
@@ -153,7 +127,6 @@ class Danger_Source:
 
 					self.danger_area.append(pos)
 
-
 class Building:
 	def __init__(self, blueprint, exits, danger_centers, agents):
 		# the blueprint of the building, should not be changed
@@ -162,14 +135,17 @@ class Building:
 
 		# need to update, the period can be determined by the main
 		self.danger_sources = list(Danger_Source(danger) for danger in danger_centers)
-		self.agents = list(Agent(agent[0], agent[1]) for agent in agents)
+		self.agents = list(Agent(agent[0], agent[1], max(len(self.grid.grid), len(self.grid.grid[0])), len(danger_centers)) for agent in agents)
 
 	def update(self):
 		for danger_source in self.danger_sources:
 			danger_source.danger_extension(self.grid)
 		# how to update agents states
-		# for agent in self.agents:
-		# 	agent.update()
+		for agent in self.agents:
+			actions = agent.getLegalActions(self)
+			for action in actions:
+				agent.update(action, get_reward(agent, self.exits), agent.getFeatures(action, self), self)
+			agent.takeAction(agent.getPolicy(self))
 
 
 	def evaluation(self):
