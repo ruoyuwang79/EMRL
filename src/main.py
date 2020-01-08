@@ -1,7 +1,7 @@
 import os, sys
 import numpy as np 
 import matplotlib.image as mpimg 
-import building, drawer
+import building, drawer, initial
 import rule
 
 file_object = open('img.csv')
@@ -27,7 +27,8 @@ exits = [(67, 88), (62, 118), (63, 118), (64, 118), (101, 72), (101, 73), (101, 
 		 (70, 181), (71, 181), (72, 181), (73, 181), (6, 146), (6, 147), (53, 57), (54, 57),
 		 (37, 26), (38, 26), (39, 26), (35, 85)]
 danger_sources = [(100, 100)]
-agents = [(2, 2)]
+agents = [(21, 55),(22,122),(28,51)]
+agents = initial.lpos(agents,tempBlueprint)
 
 def main(): 
 	testBuilding = building.Building(tempBlueprint, exits, danger_sources, agents)
