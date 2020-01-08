@@ -33,6 +33,11 @@ class Position:
 	# 	return around 
 
 class Agent(Position):
+	def __init__(self):
+		self.weights = []
+		self.alpha = 0.2
+		self.discount = 0.8
+
 	def evaluation(self, building):
 		if agents_position(self, building):
 			return find_neighbor_num(self, 4, building) + distance_to_exit(self) + distance_to_danger(self)
@@ -55,6 +60,57 @@ class Agent(Position):
 				actions.append((action, QValue))
 
 		return sorted(actions, key = lambda x: -x[1])
+
+	####q learning
+	def getQValue(self, state, action,feature):
+		"""
+		  Should return Q(state,action) = w * featureVector
+		  where * is the dotProduct operator
+		"""
+		"*** YOUR CODE HERE ***"
+		#feat = self.featExtractor.getFeatures(state,action)
+		temp = 0
+		for i in feature:#
+			temp += self.weights[i]*feature[i]
+		return temp
+
+	   
+	def update(self, state, action, nextState, reward, feature, building):
+		"""
+		   Should update your weights based on transition
+		"""
+		"*** YOUR CODE HERE ***"
+		#feat = self.featExtractor.getFeatures(state,action)
+		temp = (reward+self.discount*self.computeValueFromQValues(nextState, building)-self.getQValue(state,action))
+		for i in feature:
+			self.weights[i] += self.alpha * temp * feature[i]
+
+	def computeValueFromQValues(self, state,building):
+		"""
+		  Returns max_action Q(state,action)
+		  where the max is over legal actions.  Note that if
+		  there are no legal actions, which is the case at the
+		  terminal state, you should return a value of 0.0.
+		"""
+		"*** YOUR CODE HERE ***"
+		temp = {}
+		act = self.getLegalActions(state,building)
+		if len(act) == 0:
+			return float(0)
+		for a in act:
+			temp[a] = self.getQValue(state,a)
+
+		all_temp = list(temp.items())
+        values = [x[1] for x in all_temp]
+		return max(values)#temp[temp.argMax()]
+
+	def getLegalActions(self, state, building):
+		res = []
+		for i in Actions.directions:
+			if not building.grid.isWall(state + i):
+				res.append(i)
+		return res
+
 
 class Actions:
 	NORTHWEST = Position(-1, 1)
