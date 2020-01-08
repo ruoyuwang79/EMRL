@@ -2,6 +2,7 @@ import os, sys
 import numpy as np 
 import matplotlib.image as mpimg 
 import building, drawer
+import rule
 
 file_object = open('img.csv')
 blueprint = file_object.read().split('\n')
