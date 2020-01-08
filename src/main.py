@@ -25,15 +25,13 @@ exits = [(67, 88), (62, 118), (63, 118), (64, 118), (101, 72), (101, 73), (101, 
 		 (132, 158), (132, 159), (132, 160), (132, 161), (132, 162), (132, 163), (132, 164),
 		 (70, 181), (71, 181), (72, 181), (73, 181), (6, 146), (6, 147), (53, 57), (54, 57),
 		 (37, 26), (38, 26), (39, 26), (35, 85)]
-danger_sources = [(1, 1)]
+danger_sources = [(100, 100)]
 agents = [(2, 2)]
 
 def main(): 
 	testBuilding = building.Building(tempBlueprint, exits, danger_sources, agents)
 	testDrawer = drawer.Drawer(testBuilding)
-	for t in range(10):
-		testBuilding.update()
-		testDrawer.draw()
+	testDrawer.draw()
 
 if __name__ == '__main__': 
 	main()

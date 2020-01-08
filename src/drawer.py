@@ -1,10 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import animation
 from building import *
 
 class Drawer:
 	def __init__(self, building):
-		booleanMap = np.array(building.grid.grid)
+		self.building = building
+		self.blueprint = None
+
+	def update(self):
+		booleanMap = np.array(self.building.grid.grid)
 		self.blueprint = np.zeros(booleanMap.shape)
 		
 		for i in range(len(booleanMap)):
@@ -12,14 +17,23 @@ class Drawer:
 				self.blueprint[i][j] = 255
 				if booleanMap[i][j]:
 					self.blueprint[i][j] = 0
-		for i in building.exits:
+		for i in self.building.exits:
 			self.blueprint[i.x][i.y] = 80
-		for i in building.danger_sources:
+		for i in self.building.danger_sources:
 			for j in i.danger_area:
 				self.blueprint[j.x][j.y] = 180
-		for i in building.agents:
+		for i in self.building.agents:
 			self.blueprint[i.x][i.y] = 60
 
 	def draw(self):
-		plt.imshow(self.blueprint, cmap = 'gist_ncar')
+		fig = plt.figure()
+
+		ims = []
+		for i in range(10):
+			self.building.update()
+			self.update()
+			im = plt.imshow(self.blueprint, cmap = 'gist_ncar', animated = True)
+			ims.append([im])
+
+		ani = animation.ArtistAnimation(fig, ims, interval = 200, repeat_delay = 300)
 		plt.show()
