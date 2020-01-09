@@ -54,6 +54,15 @@ class Agent(Position):
 	def getPolicy(self, building):
 		actions = self.getLegalActions(building)
 		return max(actions, key = lambda x: self.getQValue(x, self.getFeatures(x, building)))
+
+	def Astar(self, building, target):
+		legalActions = self.getLegalActions(building)
+		if Actions.WEST in legalActions and target.y < self.y:
+			return Actions.WEST
+		elif Actions.SOUTH in legalActions and target.x > self.x:
+			return Actions.SOUTH
+		else:
+			return random.choice(legalActions)
 	   
 	def update(self, action, reward, features, building):
 		diff = (reward + self.discount * (self + action).getValue(building) - self.getQValue(action, features))
@@ -62,15 +71,15 @@ class Agent(Position):
 			self.weights[i] += self.alpha * diff * features[i]
 
 class Actions:
-	NORTHWEST = Position(-1, 1)
-	NORTH = Position(0, 1)
-	NORTHEAST = Position(1, 1)
-	WEST = Position(-1, 0)
+	NORTHWEST = Position(-1, -1)
+	NORTH = Position(-1, 0)
+	NORTHEAST = Position(-1, 1)
+	WEST = Position(0, -1)
 	STOP = Position(0, 0)
-	EAST = Position(1, 0)
-	SOUTHWEST = Position(-1, -1)
-	SOUTH = Position(0, -1)
-	SOUTHEAST = Position(1, -1)
+	EAST = Position(0, 1)
+	SOUTHWEST = Position(1, -1)
+	SOUTH = Position(1, 0)
+	SOUTHEAST = Position(1, 1)
 
 	directions = [NORTH, WEST, STOP, EAST, SOUTH]
 
@@ -102,7 +111,7 @@ class Danger_Source:
 	def get_function(self, danger_type):
 		# maybe different danger_source have different function
 		if danger_type is "fire":
-			return 2, 3
+			return 2, 90
 
 		elif danger_type is "gas":
 			return 4, 6
@@ -150,10 +159,13 @@ class Building:
 			danger_source.danger_extension(self.grid)
 		# how to update agents states
 		for agent in self.agents:
-			actions = agent.getLegalActions(self)
-			for action in actions:
-				agent.update(action, get_reward(agent, self.exits), agent.getFeatures(action, self), self)
-			agent.takeAction(agent.getPolicy(self))
+			# actions = agent.getLegalActions(self)
+			# for action in actions:
+			# 	agent.update(action, get_reward(agent, self.exits), agent.getFeatures(action, self), self)
+			# agent.takeAction(agent.getPolicy(self))
+			agent.takeAction(agent.Astar(self, Position(37, 26)))
+			if agent in self.exits:
+				self.agents.remove(agent)
 
 
 	def evaluation(self):

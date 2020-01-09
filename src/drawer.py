@@ -22,8 +22,8 @@ class Drawer:
 		for i in self.building.danger_sources:
 			for j in i.danger_area:
 				self.blueprint[j.x][j.y] = 180
-		# for i in self.building.agents:
-		# 	self.blueprint[i.x][i.y] = 60
+		for i in self.building.agents:
+			self.blueprint[i.x][i.y] = 60
 
 	def draw(self):
 		fig = plt.figure()
@@ -37,5 +37,6 @@ class Drawer:
 			txt = plt.text(0,0,i)
 			ims.append([im,txt])
 
-		ani = animation.ArtistAnimation(fig, ims, interval = 2000, repeat_delay = 30)
+		ani = animation.ArtistAnimation(fig, ims, interval = 100, repeat_delay = 300)
+		# ani.save('single_after_learn.gif', writer = 'imagemagick')
 		plt.show()
