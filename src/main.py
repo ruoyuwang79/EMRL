@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.image as mpimg 
 import building, drawer, initial
 import rule
+import random
 
 file_object = open('img.csv')
 blueprint = file_object.read().split('\n')
@@ -32,17 +33,17 @@ tempBlueprint[85][54] = True
 # 				 [False, True, True, True, True, True],
 # 				 [False, True, True, True, True, True]]
 
+
 exits = [(67, 88), (62, 118), (63, 118), (64, 118), (101, 72), (101, 73), (101, 74), 
 		 (132, 158), (132, 159), (132, 160), (132, 161), (132, 162), (132, 163), (132, 164),
 		 (70, 181), (71, 181), (72, 181), (73, 181), (6, 146), (6, 147), (53, 57), (54, 57),
 		 (37, 26), (38, 26), (39, 26), (35, 85)]
 danger_sources = [(100, 100)]
-<<<<<<< HEAD
-agents = [(21, 55),(22,122)]
-=======
-agents = [(21, 55)]
->>>>>>> 3df23727bcaedb9b8d25fb71bfa2d20fd9bada64
-# agents = initial.lpos(agents,tempBlueprint)
+
+agents = [(2,2)]
+#agents = initial.lpos(agents,tempBlueprint)
+#agents = random.sample([i for i in initial.agents_pos if i not in exits], 100)
+print (agents)
 
 def main():
 	numTrain = 10
