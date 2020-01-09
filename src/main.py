@@ -15,15 +15,7 @@ for i in range(len(blueprint)):
 		if int(blueprint[i][j]) == 0:
 			tempBlueprint[i][j] = True
 
-tempBlueprint[94][92] = False
-tempBlueprint[71][93] = False
-tempBlueprint[71][94] = False
-tempBlueprint[99][88] = False
-tempBlueprint[120][161] = False
-tempBlueprint[75][89] = True
-tempBlueprint[92][59] = True
-tempBlueprint[90][58] = True
-tempBlueprint[85][54] = True
+
 
 # tempBlueprint = [[False, False, True, True, True, True], 
 # 				 [False, True, True, True, True, True],
@@ -37,11 +29,8 @@ exits = [(67, 88), (62, 118), (63, 118), (64, 118), (101, 72), (101, 73), (101, 
 		 (70, 181), (71, 181), (72, 181), (73, 181), (6, 146), (6, 147), (53, 57), (54, 57),
 		 (37, 26), (38, 26), (39, 26), (35, 85)]
 danger_sources = [(100, 100)]
-<<<<<<< HEAD
-agents = [(21, 55),(22,122)]
-=======
+# agents = [(21, 55),(22,122)]
 agents = [(21, 55)]
->>>>>>> 3df23727bcaedb9b8d25fb71bfa2d20fd9bada64
 # agents = initial.lpos(agents,tempBlueprint)
 
 def main():
