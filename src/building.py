@@ -139,13 +139,21 @@ class Danger_Source:
 		# use grid.getDirections(somePosition) to get available direction (in list)
 		self.extension_speed, self.extension_range = self.get_function(self.danger_type)
 
+
 		for p in self.danger_area:
 
 			around = [Position(p.x - 1, p.y + 1), Position(p.x, p.y + 1), Position(p.x + 1, p.y + 1), Position(p.x - 1, p.y), Position(p.x, p.y), Position(p.x + 1, p.y),Position(p.x - 1, p.y - 1), Position(p.x, p.y - 1), Position(p.x + 1, p.y - 1)] 
 
 			possible_area = random.sample(around, self.extension_speed)
 
+
 			for pos in possible_area:
+
+				rand = random.random()
+
+				if rand > 0.1:
+
+					continue
 
 				distance2danger_center = math.sqrt((self.danger_center.x - pos.x) ** 2 + (self.danger_center.y - pos.y) ** 2)
 

@@ -29,11 +29,13 @@ class Drawer:
 		fig = plt.figure()
 
 		ims = []
-		for i in range(10):
+		for i in range(50):
 			self.building.update()
 			self.update()
 			im = plt.imshow(self.blueprint, cmap = 'gist_ncar', animated = True)
-			ims.append([im])
 
-		ani = animation.ArtistAnimation(fig, ims, interval = 200, repeat_delay = 300)
+			txt = plt.text(0,0,i)
+			ims.append([im,txt])
+
+		ani = animation.ArtistAnimation(fig, ims, interval = 2000, repeat_delay = 30)
 		plt.show()
