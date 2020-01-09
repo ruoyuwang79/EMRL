@@ -29,7 +29,7 @@ class Drawer:
 		fig = plt.figure()
 
 		ims = []
-		for i in range(50):
+		for i in range(40):
 			self.building.update()
 			self.update()
 			im = plt.imshow(self.blueprint, cmap = 'gist_ncar', animated = True)
@@ -38,5 +38,5 @@ class Drawer:
 			ims.append([im,txt])
 
 		ani = animation.ArtistAnimation(fig, ims, interval = 100, repeat_delay = 300)
-		# ani.save('single_after_learn.gif', writer = 'imagemagick')
+		ani.save('multi_after_learn.gif', writer = 'imagemagick')
 		plt.show()

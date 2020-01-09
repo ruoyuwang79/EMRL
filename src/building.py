@@ -31,6 +31,9 @@ class Agent(Position):
 	def __add__(self, other):
 		return Agent(self.x + other.x, self.y + other.y, weights = self.weights)
 
+	def __sub__(self, other):
+		return abs(self.x - other.x) + abs(self.y - other.y)
+
 	def takeAction(self, action):
 		self.x += action.x
 		self.y += action.y
@@ -57,12 +60,40 @@ class Agent(Position):
 
 	def Astar(self, building, target):
 		legalActions = self.getLegalActions(building)
-		if Actions.WEST in legalActions and target.y < self.y:
-			return Actions.WEST
-		elif Actions.SOUTH in legalActions and target.x > self.x:
-			return Actions.SOUTH
+		if not legalActions:
+			return Actions.STOP
+		if target.x < self.x and target.y < self.y:
+			for i in [Actions.WEST, Actions.NORTH, Actions.EAST, Actions.SOUTH, Actions.STOP]:
+				if i in legalActions:
+					return i
+		elif target.x < self.x and target.y > self.y:
+			for i in [Actions.EAST, Actions.NORTH, Actions.WEST, Actions.SOUTH, Actions.STOP]:
+				if i in legalActions:
+					return i
+		elif target.x > self.x and target.y < self.y:
+			for i in [Actions.WEST, Actions.SOUTH, Actions.EAST, Actions.NORTH, Actions.STOP]:
+				if i in legalActions:
+					return i
+		elif target.x > self.x and target.y > self.y:
+			for i in [Actions.EAST, Actions.SOUTH, Actions.WEST, Actions.NORTH, Actions.STOP]:
+				if i in legalActions:
+					return i
+		elif target.x > self.x and target.y == self.y:
+			for i in [Actions.SOUTH, Actions.NORTH, Actions.STOP]:
+				if i in legalActions:
+					return i
 		else:
-			return random.choice(legalActions)
+			for i in [Actions.NORTH, Actions.SOUTH, Actions.STOP]:
+				if i in legalActions:
+					return i
+		# if Actions.WEST in legalActions and target.y < self.y:
+		# 	return Actions.WEST
+		# elif Actions.SOUTH in legalActions and target.x > self.x:
+		# 	return Actions.SOUTH
+		# elif legalActions:
+		# 	return random.choice(legalActions)
+		# else:
+		# 	return Actions.STOP
 	   
 	def update(self, action, reward, features, building):
 		diff = (reward + self.discount * (self + action).getValue(building) - self.getQValue(action, features))
@@ -163,7 +194,8 @@ class Building:
 			# for action in actions:
 			# 	agent.update(action, get_reward(agent, self.exits), agent.getFeatures(action, self), self)
 			# agent.takeAction(agent.getPolicy(self))
-			agent.takeAction(agent.Astar(self, Position(37, 26)))
+			closest_exit = min(self.exits, key = lambda x: agent - x)
+			agent.takeAction(agent.Astar(self, closest_exit))
 			if agent in self.exits:
 				self.agents.remove(agent)
 
